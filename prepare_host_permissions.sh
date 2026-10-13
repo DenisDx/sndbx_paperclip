@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Grant the invoking user and the container user ACL access only inside this
-# project checkout, so Docker Compose can write the persistent data directory.
+# Grant the invoking user and the container user ACL access only to the
+# persistent data directory mounted by Docker Compose.
 set -Eeuo pipefail
 
 script_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
@@ -44,13 +44,13 @@ prepare_portable_mount_point() {
     chown --recursive "${container_uid}:${container_gid}" "${portable_home_dir}" 2>/dev/null || true
 }
 
-grant_project_access() {
+grant_data_access() {
     local invoking_user_id="$1"
     local container_uid="$2"
 
     setfacl --recursive --modify \
-        "u:${invoking_user_id}:rwX,u:${container_uid}:rwX,m::rwX" "${script_dir}"
-    find "${script_dir}" -type d -exec setfacl --default --modify \
+        "u:${invoking_user_id}:rwX,u:${container_uid}:rwX,m::rwX" "${portable_home_dir}"
+    find "${portable_home_dir}" -type d -exec setfacl --default --modify \
         "u::rwx,u:${invoking_user_id}:rwx,u:${container_uid}:rwx,g::r-x,m::rwx,o::---" {} +
 }
 
@@ -61,9 +61,9 @@ main() {
     read -r container_uid container_gid < <(container_ids)
     user_id="$(invoking_user)"
     prepare_portable_mount_point "${container_uid}" "${container_gid}"
-    grant_project_access "${user_id}" "${container_uid}"
-    printf 'Granted ACL access to user UID %s and container UID %s inside this project checkout.\n' \
-        "${user_id}" "${container_uid}"
+    grant_data_access "${user_id}" "${container_uid}"
+    printf 'Granted ACL access to user UID %s and container UID %s in %s.\n' \
+        "${user_id}" "${container_uid}" "${portable_home_dir}"
 }
 
 main "$@"

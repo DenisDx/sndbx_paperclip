@@ -6,7 +6,6 @@ Run commands from the Paperclip checkout unless stated otherwise.
 
 ```bash
 docker compose build
-sudo ./prepare_host_permissions.sh
 bash ./deploy.sh
 docker compose ps
 docker compose logs -f paperclip

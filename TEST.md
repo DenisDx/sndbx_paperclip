@@ -10,7 +10,8 @@ bash -n install.sh deploy.sh prepare_host_permissions.sh grant_current_user_data
 python3 -m py_compile app.py
 ```
 
-- Confirm `config.sndbx.json5` parses as JSON5 and contains no trailing commas.
+- Confirm `config.sndbx.json5` loads through sndbx's configuration loader with
+  `PAPERCLIP_HOST_ROOT` set to the absolute checkout path.
 - Confirm `.env` and `.env.example` expose the same keys.
 
 ## Image build

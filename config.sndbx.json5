@@ -10,6 +10,7 @@
         memory: "${PAPERCLIP_MEMORY:-4G}",
         cpus: ${PAPERCLIP_CPUS:-2},
         disk_max: "${PAPERCLIP_DISK_MAX:-20G}",
+        network_traffic_max: "${PAPERCLIP_NETWORK_TRAFFIC_MAX:-100G}",
         persistent: true,
         run_at_startup: false,
         configure_apt_mirror: false,
@@ -21,12 +22,20 @@
           environment: {
             PAPERCLIP_BIND_HOST: "${PAPERCLIP_BIND_HOST:-0.0.0.0}",
             PAPERCLIP_PORT: "${PAPERCLIP_PORT:-3100}",
-            PAPERCLIP_PUBLIC_URL: "${PAPERCLIP_PUBLIC_URL:-http://localhost:13100}",
+            PAPERCLIP_PUBLIC_URL: "${PAPERCLIP_PUBLIC_URL:-http://localhost:13100}"
           },
+          readiness: [
+            {
+              type: "http",
+              url: "http://127.0.0.1:${PAPERCLIP_HOST_PORT:-13100}/api/health",
+              attempts: 90,
+              interval_seconds: 1
+            }
+          ]
         },
         tmpfs: [
           "/tmp:rw,size=512m",
-          "/run:rw,size=64m",
+          "/run:rw,size=64m"
         ],
         shared_directories: [
           {
@@ -36,7 +45,7 @@
             source_type: "directory",
             permission: "rw",
             required: true,
-            create_if_missing: true,
+            create_if_missing: true
           },
           {
             host_path: "${PAPERCLIP_HOST_ROOT}/.env",
@@ -44,28 +53,28 @@
             mount_type: "file",
             source_type: "file",
             permission: "ro",
-            required: false,
+            required: false
           },
         ],
         port_bindings: [
           {
             bind_host: "${PAPERCLIP_SSH_BIND_HOST:-0.0.0.0}",
             vm_port: 22,
-            publish_port: ${PAPERCLIP_SSH_HOST_PORT:-12022},
+            publish_port: ${PAPERCLIP_SSH_HOST_PORT:-12022}
           },
           {
             bind_host: "${PAPERCLIP_BIND_HOST:-0.0.0.0}",
             vm_port: 3100,
-            publish_port: ${PAPERCLIP_HOST_PORT:-13100},
-          },
-        ],
-      },
-    },
+            publish_port: ${PAPERCLIP_HOST_PORT:-13100}
+          }
+        ]
+      }
+    }
   },
   envids: {
     "paperclip-env-token": {
       sandbox: "paperclip",
-      description: "Paperclip environment",
-    },
-  },
+      description: "Paperclip environment"
+    }
+  }
 }

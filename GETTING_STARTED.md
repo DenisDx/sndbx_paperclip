@@ -16,11 +16,13 @@ agents and API keys.
 
 ```bash
 docker build -t paperclip:latest .
-sudo ./prepare_host_permissions.sh
 ```
 
 Merge `config.sndbx.json5` into the root `sndbx` configuration, set
 `PAPERCLIP_HOST_ROOT` to this checkout, and start the `paperclip` sandbox.
+The sandbox path aligns the container UID with the sndbx service user, so it
+does not require `prepare_host_permissions.sh`; that script is for standalone
+Docker Compose deployments only.
 
 ## Connect an OpenClaw instance
 
