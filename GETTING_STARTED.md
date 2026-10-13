@@ -1,6 +1,14 @@
 # Getting Started
 
+Choose one deployment mode for this checkout. Do not run Docker Compose while
+the sndbx `paperclip` sandbox uses the same `data/` directory: the services
+would conflict on ports and could access the embedded PostgreSQL data at the
+same time.
+
 ## Docker Compose
+
+> **WARNING:** `./install.sh` is only for the standalone Docker Compose mode.
+> Do not run it when this checkout is managed by sndbx.
 
 ```bash
 cp .env.example .env

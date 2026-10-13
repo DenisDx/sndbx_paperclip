@@ -185,6 +185,13 @@ sandboxes have unrestricted networking by default.
 
 ## Running with Docker Compose (optional)
 
+Choose either this standalone deployment or the sndbx sandbox for one checkout.
+Do not run both against the same `data/` directory: they conflict on the
+published ports and can concurrently access the embedded PostgreSQL data.
+
+> **WARNING:** `./install.sh` is only for the standalone Docker Compose mode.
+> Do not run it when this checkout is managed by sndbx.
+
 The same image can run outside sndbx:
 
 ```bash

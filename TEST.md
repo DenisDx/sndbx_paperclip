@@ -26,6 +26,9 @@ reports v24.
 
 ## Runtime (Docker Compose)
 
+> **WARNING:** `./install.sh` is only for the standalone Docker Compose mode.
+> Do not run it when this checkout is managed by sndbx.
+
 ```bash
 cp .env.example .env
 ./install.sh
