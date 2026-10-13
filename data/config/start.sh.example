@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# Optional Paperclip startup override. Copy this file to start.sh (chmod 0750)
+# to replace the default server command, for example to add a reverse proxy.
+# The default command is:
+#
+#   cd /app
+#   exec node --import ./server/node_modules/tsx/dist/loader.mjs server/dist/index.js
+set -Eeuo pipefail
+
+cd /app
+exec node --import ./server/node_modules/tsx/dist/loader.mjs server/dist/index.js

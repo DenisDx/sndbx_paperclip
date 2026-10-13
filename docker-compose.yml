@@ -1,0 +1,35 @@
+services:
+  paperclip:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: paperclip:latest
+    container_name: paperclip
+    restart: unless-stopped
+    # The image runs tini as PID 1, so Docker init is intentionally not added.
+    pids_limit: 2048
+    # Includes the adapter-settlement window and final cleanup.
+    stop_grace_period: 90s
+    env_file:
+      - .env
+    environment:
+      HOME: /paperclip
+      PAPERCLIP_BIND_HOST: ${PAPERCLIP_BIND_HOST:-0.0.0.0}
+      PAPERCLIP_PORT: ${PAPERCLIP_PORT:-3100}
+      PAPERCLIP_PUBLIC_URL: ${PAPERCLIP_PUBLIC_URL:-http://localhost:13100}
+      TZ: ${TZ:-UTC}
+    volumes:
+      - type: bind
+        source: ./data
+        target: /paperclip
+        read_only: false
+      - type: bind
+        source: ./.env
+        target: /paperclip/.env
+        read_only: true
+    tmpfs:
+      - /tmp:rw,size=512m
+      - /run:rw,size=64m
+    ports:
+      - "${PAPERCLIP_BIND_HOST:-0.0.0.0}:${PAPERCLIP_HOST_PORT:-13100}:3100"
+      - "${PAPERCLIP_SSH_BIND_HOST:-0.0.0.0}:${PAPERCLIP_SSH_HOST_PORT:-12022}:22"

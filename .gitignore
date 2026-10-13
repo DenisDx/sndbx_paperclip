@@ -1,0 +1,8 @@
+.env
+data/*
+!data/.gitkeep
+!data/config/
+data/config/*
+!data/config/start.sh.example
+
+__pycache__/
