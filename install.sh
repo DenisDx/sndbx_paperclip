@@ -8,16 +8,16 @@ readonly environment_file="${script_dir}/.env"
 readonly service_name="paperclip"
 
 prepare_environment() {
+    local environment_created=false
+
     if [[ ! -f "${environment_file}" ]]; then
-        cp "${script_dir}/.env.example" "${environment_file}"
-        chmod 0600 "${environment_file}"
+        environment_created=true
     fi
 
-    if grep --quiet '^BETTER_AUTH_SECRET=replace-with-a-long-random-secret$' "${environment_file}"; then
-        local secret
-        secret="$(openssl rand -hex 32)"
-        sed -i "s/^BETTER_AUTH_SECRET=.*/BETTER_AUTH_SECRET=${secret}/" "${environment_file}"
-        unset secret
+    source "${script_dir}/configure-public-origin.sh"
+    paperclip_prepare_environment "${script_dir}"
+    if [[ "${environment_created}" == true ]]; then
+        paperclip_configure_public_origin "${environment_file}"
     fi
 }
 

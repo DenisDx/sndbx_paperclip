@@ -1,5 +1,5 @@
 // Merge this template into the root sndbx config and set PAPERCLIP_HOST_ROOT to
-// the absolute path of this checkout (e.g. /home/denis/sndbx/images/paperclip).
+// the absolute path of this checkout (e.g. /path/to/sndbx/images/paperclip).
 {
   sandboxes: {
     items: {
@@ -22,7 +22,10 @@
           environment: {
             PAPERCLIP_BIND_HOST: "${PAPERCLIP_BIND_HOST:-0.0.0.0}",
             PAPERCLIP_PORT: "${PAPERCLIP_PORT:-3100}",
-            PAPERCLIP_PUBLIC_URL: "${PAPERCLIP_PUBLIC_URL:-http://localhost:13100}"
+            PAPERCLIP_PUBLIC_URL: "${PAPERCLIP_PUBLIC_URL:-http://localhost:13100}",
+            PAPERCLIP_ALLOWED_HOSTNAMES: "${PAPERCLIP_ALLOWED_HOSTNAMES:-}",
+            BETTER_AUTH_URL: "${BETTER_AUTH_URL:-http://localhost:13100}",
+            BETTER_AUTH_TRUSTED_ORIGINS: "${BETTER_AUTH_TRUSTED_ORIGINS:-http://localhost:13100}"
           },
           readiness: [
             {

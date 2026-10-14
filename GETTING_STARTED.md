@@ -11,26 +11,25 @@ same time.
 > Do not run it when this checkout is managed by sndbx.
 
 ```bash
-cp .env.example .env
-chmod 0600 .env
-# set PAPERCLIP_UID/GID to your user, PAPERCLIP_PUBLIC_URL, and provider keys
-./install.sh
+./install.sh # prompts for the public host/IP or URL on the first run
 ```
 
-Open `http://localhost:13100/`, create the first board account, and configure
+Open the printed public URL, create the first board account, and configure
 agents and API keys.
 
 ## sndbx
 
 ```bash
+./configure_sndbx.sh "$SNDBX_ROOT" # prompts for the public host/IP or URL
 docker build -t paperclip:latest .
 ```
 
-Merge `config.sndbx.json5` into the root `sndbx` configuration, set
-`PAPERCLIP_HOST_ROOT` to this checkout, and start the `paperclip` sandbox.
-The sandbox path aligns the container UID with the sndbx service user, so it
-does not require `prepare_host_permissions.sh`; that script is for standalone
-Docker Compose deployments only.
+Merge `config.sndbx.json5` into the root `sndbx` configuration and start the
+`paperclip` sandbox. The helper sets `PAPERCLIP_HOST_ROOT` and all public URL
+and Better Auth origin variables in the root sndbx `.env`. The sandbox path
+aligns the container UID with the sndbx service user, so it does not require
+`prepare_host_permissions.sh`; that script is for standalone Docker Compose
+deployments only.
 
 ## Connect an OpenClaw instance
 

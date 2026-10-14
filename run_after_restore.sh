@@ -39,6 +39,16 @@ restore_owner_and_modes() {
     find "${data_dir}" -xdev -type f ! -perm /0111 -exec chmod 0640 {} +
 }
 
+# secure_embedded_postgres_data removes inherited ACLs and secure database modes.
+secure_embedded_postgres_data() {
+    local database_dir="${data_dir}/instances/default/db"
+    [[ -d "${database_dir}" ]] || return
+
+    setfacl --remove-all --recursive "${database_dir}"
+    find "${database_dir}" -xdev -type d -exec chmod 0700 {} +
+    find "${database_dir}" -xdev -type f -exec chmod 0600 {} +
+}
+
 restore_runtime_files() {
     local startup_script="${data_dir}/config/start.sh"
     if [[ -f "${startup_script}" ]]; then
@@ -52,6 +62,7 @@ main() {
     local container_uid container_gid
     read -r container_uid container_gid < <(container_ids)
     restore_owner_and_modes "${container_uid}" "${container_gid}"
+    secure_embedded_postgres_data
     restore_runtime_files
     printf 'Restored Paperclip data permissions at %s\n' "${data_dir}"
 }

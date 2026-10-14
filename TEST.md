@@ -6,7 +6,8 @@ Static checks run without Docker. The build and runtime checks require Docker.
 
 ```bash
 bash -n docker/entrypoint.sh docker/start-paperclip.sh docker/load-paperclip-env.sh
-bash -n install.sh deploy.sh prepare_host_permissions.sh grant_current_user_data_access.sh run_after_restore.sh
+bash -n configure-public-origin.sh configure_sndbx.sh install.sh deploy.sh \
+  prepare_host_permissions.sh grant_current_user_data_access.sh run_after_restore.sh
 python3 -m py_compile app.py
 ```
 
@@ -18,11 +19,11 @@ python3 -m py_compile app.py
 
 ```bash
 docker build -t paperclip:latest .
-docker run --rm --entrypoint bash paperclip:latest -lc 'id node; node --version; test -f /app/server/dist/index.js'
+docker run --rm --entrypoint bash paperclip:latest -lc 'id node; node --version; test -f /app/server/dist/index.js; opencode --version'
 ```
 
-Expected: the build finishes, `server/dist/index.js` exists, and `node --version`
-reports v24.
+Expected: the build finishes, `server/dist/index.js` exists, `node --version`
+reports v24, and the preinstalled `opencode` CLI reports its version.
 
 ## Runtime (Docker Compose)
 
@@ -30,8 +31,7 @@ reports v24.
 > Do not run it when this checkout is managed by sndbx.
 
 ```bash
-cp .env.example .env
-./install.sh
+./install.sh # enter the public host/IP or URL when prompted
 docker compose ps
 curl -s -o /dev/null -w '%{http_code}\n' http://127.0.0.1:13100/api/health
 ```

@@ -54,6 +54,16 @@ repair_ownership() {
     find "${home_dir}" -path "${external_env}" -prune -o -exec chown node:node {} +
 }
 
+# secure_embedded_postgres_data removes inherited ACLs and secure database modes.
+secure_embedded_postgres_data() {
+    local database_dir="${home_dir}/instances/default/db"
+    [[ -d "${database_dir}" ]] || return
+
+    setfacl --remove-all --recursive "${database_dir}"
+    find "${database_dir}" -xdev -type d -exec chmod 0700 {} +
+    find "${database_dir}" -xdev -type f -exec chmod 0600 {} +
+}
+
 if [[ -d "${home_dir}" ]]; then
     expected_marker="v1 $(id -u node):$(id -g node)"
     current_marker="$(cat "${ownership_marker}" 2>/dev/null || true)"
@@ -68,6 +78,7 @@ if [[ -d "${home_dir}" ]]; then
             repair_ownership
         fi
     fi
+    secure_embedded_postgres_data
 fi
 
 printf 'starting paperclip as node (%s:%s)\n' "$(id -u node)" "$(id -g node)" >&2
