@@ -6,7 +6,7 @@ GETTING_STARTED.md
 DOCUMENTS.md
 commands.md
 TEST.md
-config.sndbx.json5
+sndbx.overlay.json5
 docker-compose.yml
 install.sh
 deploy.sh

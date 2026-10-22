@@ -11,7 +11,7 @@ bash -n configure-public-origin.sh configure_sndbx.sh install.sh deploy.sh \
 python3 -m py_compile app.py
 ```
 
-- Confirm `config.sndbx.json5` loads through sndbx's configuration loader with
+- Confirm `sndbx.overlay.json5` loads through sndbx's configuration loader with
   `PAPERCLIP_HOST_ROOT` set to the absolute checkout path.
 - Confirm `.env` and `.env.example` expose the same keys.
 

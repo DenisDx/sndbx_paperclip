@@ -41,7 +41,7 @@ curl -H "Authorization: Bearer ${PAPERCLIP_API_KEY}" "${PAPERCLIP_API_URL}/api/h
 docker build -t paperclip:latest .
 ```
 
-Merge `config.sndbx.json5` into the root configuration, set
+Merge `sndbx.overlay.json5` into the root configuration, set
 `PAPERCLIP_HOST_ROOT`, then start the `paperclip` sandbox with the normal sndbx
 operator command or UI.
 

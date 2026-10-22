@@ -24,7 +24,7 @@ agents and API keys.
 docker build -t paperclip:latest .
 ```
 
-Merge `config.sndbx.json5` into the root `sndbx` configuration and start the
+Merge `sndbx.overlay.json5` into the root `sndbx` configuration and start the
 `paperclip` sandbox. The helper sets `PAPERCLIP_HOST_ROOT` and all public URL
 and Better Auth origin variables in the root sndbx `.env`. The sandbox path
 aligns the container UID with the sndbx service user, so it does not require
